@@ -40,9 +40,11 @@ class ParserModel(nn.Module):
         self.hidden_size = hidden_size
         self.pretrained_embeddings = nn.Embedding(embeddings.shape[0], self.embed_size)
         self.pretrained_embeddings.weight = nn.Parameter(torch.tensor(embeddings))
-        self.embed_to_hidden=nn.init.xavier_uniform(torch.empty(self.embed_size, self.n_features), gain=1)
+        self.embed_to_hidden=nn.Linear(self.embed_size, self.n_features)
+        nn.init.xavier_uniform(torch.tensor(self.embed_to_hidden.weight), gain=1)
         self.dropout=nn.Dropout(p=self.dropout_prob)
-        self.hidden_to_logits=nn.init.xavier_uniform(torch.empty(self.n_features, self.n_classes), gain=1)
+        self.hidden_to_logits=nn.Linear(self.n_features, self.embed_size)
+        nn.init.xavier_uniform(torch.tensor(self.hidden_to_logits.weight), gain=1)
 
         ### YOUR CODE HERE (~5 Lines)
         ### TODO:
